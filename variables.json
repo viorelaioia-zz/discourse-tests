@@ -1,0 +1,12 @@
+{
+  "users": {
+    "vouched": {
+      "email": "",
+      "name": ""
+    },
+    "unvouched": {
+      "email": "",
+      "name": ""
+    }
+  }
+}
