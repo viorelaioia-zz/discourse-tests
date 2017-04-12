@@ -41,3 +41,6 @@ class Page(object):
         finally:
             # set back to where you once belonged
             self.selenium.implicitly_wait(10)
+
+    def go_to_url(self, url):
+        self.selenium.get(url)
