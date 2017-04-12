@@ -11,6 +11,7 @@ class Base(Page):
     _avatar_image_locator = (By.CSS_SELECTOR, '.avatar')
     _logout_button_locator = (By.CSS_SELECTOR, '.widget-link.logout')
     _page_not_found_error_message_locator = (By.CSS_SELECTOR, '.page-not-found')
+    _subcategory_locator = (By.CSS_SELECTOR, '.category-navigation .category-breadcrumb li:nth-child(2) a[aria-label="Display category list"]')
 
     @property
     def page_title(self):
@@ -29,6 +30,10 @@ class Base(Page):
     def page_not_found_error_message(self):
         self.wait_for_element_visible(*self._page_not_found_error_message_locator)
         return self.selenium.find_element(*self._page_not_found_error_message_locator).text
+
+    @property
+    def subcategory(self):
+        return self.selenium.find_element(*self._subcategory_locator).text
 
     def click_sign_in_button(self):
         self.selenium.find_element(*self._login_button_locator).click()
