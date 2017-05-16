@@ -1,3 +1,5 @@
+import uuid
+
 import pytest
 
 import restmail
@@ -31,6 +33,16 @@ def vouched_user(stored_users):
 @pytest.fixture
 def unvouched_user(stored_users):
     return stored_users['unvouched']
+
+
+@pytest.fixture
+def new_email():
+    return 'test_user_{0}@restmail.net'.format(uuid.uuid1())
+
+
+@pytest.fixture
+def new_user(new_email):
+    return {'email': new_email}
 
 
 @pytest.fixture

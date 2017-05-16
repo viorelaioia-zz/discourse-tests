@@ -33,3 +33,15 @@ class TestAccount:
         home_page.go_to_url('https://discourse.mozilla-community.org/c/mozillians/vouched-mozillians')
         assert 'Vouched Mozillians' == home_page.subcategory
         home_page.click_logout_menu_item()
+
+    @pytest.mark.nondestructive
+    def test_create_and_delete_account(self, base_url, selenium, new_user):
+        home_page = Home(base_url, selenium)
+        register = home_page.create_new_user(new_user['email'])
+        register.enter_username("test_user")
+        home_page = register.click_create_new_account_button()
+        assert home_page.is_avatar_displayed
+        home_page.click_avatar()
+        account_page = home_page.click_preferences()
+        home_page = account_page.delete_account()
+        assert home_page.is_login_button_displayed
