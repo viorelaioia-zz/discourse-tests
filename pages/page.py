@@ -44,3 +44,10 @@ class Page(object):
 
     def go_to_url(self, url):
         self.selenium.get(url)
+
+
+class PageRegion(Page):
+
+    def __init__(self, base_url, selenium, root_element):
+        super(PageRegion, self).__init__(base_url, selenium)
+        self._root_element = root_element
