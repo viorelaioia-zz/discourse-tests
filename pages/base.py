@@ -13,6 +13,8 @@ class Base(Page):
     _page_not_found_error_message_locator = (By.CSS_SELECTOR, '.page-not-found')
     _subcategory_locator = (By.CSS_SELECTOR, '.category-navigation .category-breadcrumb li:nth-child(2) a[aria-label="Display category list"]')
     _preferences_button_locator = (By.CSS_SELECTOR, '.user-preferences-link')
+    _toggle_menu_button_locator = (By.ID, 'toggle-hamburger-menu')
+    _categories_list = (By.CSS_SELECTOR, 'li[class*="category-link"] a:nth-child(1)')
 
     @property
     def page_title(self):
@@ -36,6 +38,11 @@ class Base(Page):
     def subcategory(self):
         return self.selenium.find_element(*self._subcategory_locator).text
 
+    @property
+    def categories_list_names(self):
+        categories_list = self.selenium.find_elements(*self._categories_list)
+        return [category.text for category in categories_list]
+
     def click_sign_in_button(self):
         self.selenium.find_element(*self._login_button_locator).click()
 
@@ -57,11 +64,23 @@ class Base(Page):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_login_button_displayed)
 
     def click_preferences(self):
+        self.click_avatar()
         self.selenium.find_element(*self._preferences_button_locator).click()
-        from pages.account import Account
-        return Account(self.base_url, self.selenium)
+        from pages.preferences import Preferences
+        return Preferences(self.base_url, self.selenium)
 
     def create_new_user(self, email):
         self.login(email)
         from pages.register import Register
         return Register(self.base_url, self.selenium)
+
+    def click_toggle_menu(self):
+        self.selenium.find_element(*self._toggle_menu_button_locator).click()
+
+    def select_category(self, category):
+        categories_list = self.selenium.find_elements(*self._categories_list)
+        for item in categories_list:
+            if item.text == category:
+                item.click()
+                from pages.category import Category
+                return Category(self.base_url, self.selenium)
