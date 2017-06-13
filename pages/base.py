@@ -11,6 +11,7 @@ class Base(Page):
     _avatar_image_locator = (By.CSS_SELECTOR, '#current-user a[class="icon"]')
     _logout_button_locator = (By.CSS_SELECTOR, '.widget-link.logout')
     _page_not_found_error_message_locator = (By.CSS_SELECTOR, '.page-not-found')
+    _category_locator = (By.CSS_SELECTOR, '.category-navigation .category-breadcrumb li:nth-child(1) a[aria-label="Display category list"]')
     _subcategory_locator = (By.CSS_SELECTOR, '.category-navigation .category-breadcrumb li:nth-child(2) a[aria-label="Display category list"]')
     _preferences_button_locator = (By.CSS_SELECTOR, '.user-preferences-link')
     _toggle_menu_button_locator = (By.ID, 'toggle-hamburger-menu')
@@ -42,6 +43,10 @@ class Base(Page):
     def categories_list_names(self):
         categories_list = self.selenium.find_elements(*self._categories_list)
         return [category.text for category in categories_list]
+
+    @property
+    def category(self):
+        return self.selenium.find_element(*self._category_locator).text
 
     def click_sign_in_button(self):
         self.selenium.find_element(*self._login_button_locator).click()
