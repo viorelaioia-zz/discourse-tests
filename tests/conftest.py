@@ -1,5 +1,6 @@
 import uuid
 
+import pyotp
 import pytest
 
 import restmail
@@ -52,3 +53,14 @@ def login_link(username):
     for link in mail_content:
         if link.startswith("https"):
             return link
+
+
+@pytest.fixture
+def ldap_user(stored_users):
+    return stored_users['ldap']
+
+
+@pytest.fixture
+def passcode(secret_seed):
+    totp = pyotp.TOTP(secret_seed)
+    return totp.now()
