@@ -58,6 +58,11 @@ class Base(Page):
         login_link = conftest.login_link(email)
         self.selenium.get(login_link)
 
+    def login_with_ldap(self, email_address, password, passcode):
+        self.click_sign_in_button()
+        auth0 = Auth0(self.base_url, self.selenium)
+        auth0.login_with_ldap(email_address, password, passcode)
+
     def click_avatar(self):
         self.selenium.find_element(*self._avatar_image_locator).click()
         WebDriverWait(self.selenium, self.timeout).until(

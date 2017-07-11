@@ -1,9 +1,11 @@
 # coding=utf-8
 import random
+import uuid
 
 import pytest
 
 from pages.home_page import Home
+from tests import conftest
 
 
 class TestAccount:
@@ -79,3 +81,22 @@ class TestAccount:
             assert home_page.category == category_name
             home_page.click_toggle_menu()
         home_page.click_logout_menu_item()
+
+    @pytest.mark.nondestructive
+    def test_user_can_create_a_new_topic(self, base_url, selenium, ldap_user):
+        home_page = Home(base_url, selenium)
+        home_page.login_with_ldap(ldap_user['email'], ldap_user['password'], conftest.passcode(ldap_user['secret_seed']))
+        assert home_page.is_avatar_displayed
+        home_page.click_add_new_topic()
+        title = "Test topic - {0}".format(uuid.uuid1())
+        home_page.enter_new_topic_title(title)
+        category = "playground"
+        home_page.select_category(category)
+        description = "This is a topic description for testing - {}".format(uuid.uuid1())
+        home_page.enter_topic_description(description)
+        topic_page = home_page.click_create_topic()
+        assert title == topic_page.topic_title
+        assert category == topic_page.topic_category
+        assert description == topic_page.topic_description
+        topic_page.click_logout_menu_item()
+        assert topic_page.is_login_button_displayed
