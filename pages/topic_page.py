@@ -14,8 +14,8 @@ class TopicPage(Base):
 
     @property
     def topic_category(self):
-            return self.selenium.find_element(*self._topic_category_locator).text
+        return self.selenium.find_element(*self._topic_category_locator).text
 
     @property
     def topic_description(self):
-            return self.selenium.find_element(*self._topic_description_locator).text
+        return self.selenium.find_element(*self._topic_description_locator).text
